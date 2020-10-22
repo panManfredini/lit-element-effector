@@ -7,11 +7,28 @@
   "repository": "git@github.com:panManfredini/lit-element-effector.git",
   "author": "pan <pan.manfredini@gmail.com>",
   "license": "MIT",
+  "keywords": [
+    "web-component",
+    "state",
+    "app-state",
+    "lit-element",
+    "custom-element",
+    "effector"
+  ],
   "devDependencies": {
+    "@types/chai": "^4.2.14",
+    "@types/chai-spies": "^1.0.2",
+    "@types/mocha": "^8.0.3",
+    "chai": "^4.2.0",
+    "effector": "^21.5.0",
+    "karma": "^5.2.3",
+    "karma-chai": "^0.1.0",
+    "karma-chrome-launcher": "^3.1.0",
+    "karma-mocha": "^2.0.1",
+    "karma-nyan-reporter": "^0.2.5",
+    "lit-element": "^2.4.0",
+    "mocha": "^8.2.0",
     "typescript": "^4.0.3"
   },
-  "dependencies": {
-    "effector": "^21.5.0",
-    "lit-element": "^2.4.0"
-  }
+  "dependencies": {}
 }

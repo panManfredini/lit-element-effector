@@ -7,10 +7,9 @@
         "outDir": "./",
         "allowJs": true,
         "sourceMap": false,
-        "experimentalDecorators": true
     },
     "include": [
-        "./src/index.ts","./src/libs/*",
+        "./src/index.ts",
         "node_modules/*"
     ],
     "exclude": []
