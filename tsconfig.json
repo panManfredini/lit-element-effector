@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "module": "es6",
+        "moduleResolution":"Node",
+        "target": "es2018",
+        "noImplicitAny": true,
+        "outDir": "./",
+        "allowJs": true,
+        "sourceMap": false,
+        "experimentalDecorators": true
+    },
+    "include": [
+        "./src/index.ts","./src/libs/*",
+        "node_modules/*"
+    ],
+    "exclude": []
+}
