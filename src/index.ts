@@ -1,8 +1,7 @@
-import type {LitElement} from "lit-element"
-import type {Store, Subscription, Effect,Event} from "effector"
+import  {LitElement} from "lit-element"
+import {Store, Subscription, Effect,Event, createEvent, createStore} from "effector"
 
 type ExtendedlitElement = {
-    properties? : object
     new(): LitElement
 }
 
@@ -15,18 +14,17 @@ export function EffectorMxn<X,Q extends effectAPI>( BaseClass: ExtendedlitElemen
         _watcherPointer: Subscription;
 
         static get properties() {
-            let returnPorps = { $ : {attribute:false, reflect:false} } ;
-            if(super.properties)
-                return Object.assign({}, super.properties, returnPorps);
-            else returnPorps;
+            return { $ : {attribute:false, reflect:false} } ;
         }
         
         get store(): Store<X> {
             return EffectorStore;
         }
         
-        get dispatch() {
-            return API;   
+        get dispatch() : Q {
+            //@ts-ignore
+            if(super.dispatch && API === undefined)  return super.dispatch;
+            else return API;   
         }
             
         connectedCallback(){
@@ -84,3 +82,6 @@ export function EffectorMxn<X,Q extends effectAPI>( BaseClass: ExtendedlitElemen
 
     }
 }
+
+
+

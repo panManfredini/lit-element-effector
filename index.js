@@ -5,17 +5,17 @@ export function EffectorMxn(BaseClass, EffectorStore, API = undefined) {
             this.$ = undefined;
         }
         static get properties() {
-            let returnPorps = { $: { attribute: false, reflect: false } };
-            if (super.properties)
-                return Object.assign({}, super.properties, returnPorps);
-            else
-                returnPorps;
+            return { $: { attribute: false, reflect: false } };
         }
         get store() {
             return EffectorStore;
         }
         get dispatch() {
-            return API;
+            //@ts-ignore
+            if (super.dispatch && API === undefined)
+                return super.dispatch;
+            else
+                return API;
         }
         connectedCallback() {
             if (super.connectedCallback)

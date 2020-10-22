@@ -1,15 +1,23 @@
 import {EffectorMxn} from "../index.js"
-import {LitElement} from "lit-element"
-import {createEvent,restore} from "effector"
+import {createEvent,createStore,restore} from "effector"
+import { expect } from '@open-wc/testing';
+import {html, LitElement} from "lit-element"
 
 describe("Specs for routedView",()=>{
     
     var el01;
     const event = createEvent();
-    const _store = restore(event, {name:"ciao", age:7, obj : {a:1, b:2}}); 
+    const default_data =  {name:"ciao", age:7, obj : {a:1, b:2}}
+    const _store = restore(event, default_data ); 
 
     class t_class extends EffectorMxn(LitElement,_store,{test:event}){
-        
+        static get properties() {
+            return {testProp : {attribute:false, reflect:false} } ;
+        }
+        constructor(){
+            super();
+            this.testProp = "zero";
+        }
         render(){
             return html`${this.$.name} ${this.$.age} ${this.$.obj.a} ${this.$.obj.b}`
         }
@@ -19,9 +27,6 @@ describe("Specs for routedView",()=>{
         customElements.define("t-gv-01",t_class);
     });
 
-    after(()=>{
-        localStorage.clear();
-    })
     
     beforeEach(()=>{
         el01 = document.createElement("t-gv-01");
@@ -36,44 +41,43 @@ describe("Specs for routedView",()=>{
         expect(el01).to.exist;
     });
 
-/*    it("On viewData change, data is NOT set if route is NOT current_route",()=>{
-        event({name:"ciccio", age:17, obj:{a:3,b:4}});
-        expect(el01.$.name).to.equal("");
-        expect(el01.$.age).to.equal(0);
-        expect(el01.$.obj).to.deep.equal({a:0,b:1});
+    it("On Startup Store prop `$` and additional user defined prop data are well  defined",()=>{
+        expect(el01.$).to.deep.equal(default_data);
+        expect(el01.testProp).to.deep.equal("zero");
     });
 
-    it("On request set route to current_route, it is shown and data is set",async ()=>{
-
-        API_Request.update({location:"/test"});
-        expect(el01.getAttribute("show")).to.equal("true");
-        expect(el01.$.name).to.equal("ciccio");
-        expect(el01.$.age).to.equal(17);
-        expect(el01.$.obj).to.deep.equal({a:3,b:4});
-    });
-
-    it("On viewData change, data is set if route is current_route",()=>{
+    it("On store data change, data is set",()=>{
         event({name:"pip", age:7, obj:{a:3,b:12}});
         expect(el01.$.name).to.equal("pip"); expect(el01.$.age).to.equal( 7 ) ;
         expect(el01.$.obj).to.deep.equal({a:3,b:12});
     });
 
     it("Changing directly the property does not effect the store",()=>{
-        event({name:"pip", age:7, obj:{a:3,b:12}});
-        expect(el01.$.name).to.equal("pip"); expect(el01.$.age).to.equal( 7 ) ;
-        expect(el01.$.obj).to.deep.equal({a:3,b:12});
+        event({name:"pipo", age:12, obj:{a:3,b:18}});
+        expect(el01.$.name).to.equal("pipo"); expect(el01.$.age).to.equal( 12 ) ;
+        expect(el01.$.obj).to.deep.equal({a:3,b:18});
         el01.$.name = "paul"
         el01.$.age = 57;
         el01.$.obj.a = 73;
-        expect(_store.getState()).to.deep.equal({ name:"pip", age:7, obj:{a:3,b:12} })
+        expect(_store.getState()).to.deep.equal({ name:"pipo", age:12, obj:{a:3,b:18} })
     });
 
-    it("On route change to other route the view is not shown and view is cleared", async ()=>{
-        API_Request.update({location:"/testo"});
-        expect(el01.getAttribute("show")).to.equal("false");
-        expect(el01.$.name).to.equal(""); expect(el01.$.age).to.equal( 0 );
-        expect(el01.$.obj).to.deep.equal({a:0,b:0});
+    it("Dispatch events",()=>{
+        el01.dispatch.test(default_data);
+        expect(_store.getState()).to.deep.equal(default_data);
+        expect(el01.$).to.deep.equal(default_data);
     });
 
-  */  
+    it("Iherits correctly props from a parent class",()=>{
+
+        class testClass extends EffectorMxn(t_class,createStore(Object.assign({c:89}, default_data))){}
+        customElements.define("t-gv-02",testClass);
+        var el02 = document.createElement("t-gv-02");
+        document.body.appendChild(el02);
+
+        expect(el02).to.exist;
+        expect(el02.testProp).to.equal("zero");
+        expect(el02.$.c).to.equal(89);
+        expect(el02.dispatch.test).to.exist;
+    });
 })
