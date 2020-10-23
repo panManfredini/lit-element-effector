@@ -14,8 +14,8 @@ Mixin to attach an Effector Store to lit-element.
 EffectorMxn( BaseClass, Store, EffectAPI = undefined ) => class extends BaseClass
 
 ```
-The mixin takes as input parameters a `BaseClass` which must inherit from a `LitElement`, an Effector `Store` and an optional object, `EffectAPI`,
-that function as shortcut interface between the state change API and the custom element. The `EffectAPI` keys are strings and its values are expected to be 
+The mixin takes as input parameters a `BaseClass` which must inherit from a `LitElement`, an Effector `Store` and an optional object, `EffectAPI`.
+This last one helps building an interface between the state change API and the custom-element, its values are expected to be 
 either effector `effects` or `events`.
 
 
@@ -26,21 +26,23 @@ import {createStore} from "effector"
 
 const store = createStore( {greetings:"hello"} );
 
-class testClass01 extends EffectorMxn( LitElement, store ){
+class example01 extends EffectorMxn( LitElement, store ){
     render(){
         // the store state is available with the `$` property
         return html`<h1> ${this.$.greetings} world! </h1>`
     }
 }
+
+customElements.define("example-01",example01);
 ```
-The provided store is reflected to the LitElement property ` $ `. Supports any store types, from strings to objects. 
-The store state is deep-copied to ` $ `. Direct assignment to the property ` $ ` should be avoided, altough they wont effect the state.
+The provided store is reflected to the LitElement property [ $ ](). Supports any store types, from boolean to objects. 
+The store state is deep-copied to [ $ ](). Direct assignment to the property [ $ ]() should be avoided, altough they wont effect the state.
 
 
-## Event and Effect API Helper
+### Event and Effect API Helper
 
-## React on Store change with user defined function
+### React on Store change with user defined function
 
-## Inheritance
+### Inheritance
 
-## Testing Helpers
+### Testing Helpers
