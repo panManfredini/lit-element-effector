@@ -1,11 +1,11 @@
 import  {LitElement} from "lit-element"
 import {Store, Subscription, Effect,Event, createEvent, createStore} from "effector"
 
-type ExtendedlitElement = {
+export type ExtendedlitElement = {
     new(): LitElement
 }
 
-type effectAPI = { [key:string]:(Effect<any,any,any>| Event<any> | ((i:any)=>void) )}
+export interface effectAPI  { [key:string]:(Effect<any,any,any>| Event<any> | ((i:any)=>void) )}
 
 export function EffectorMxn<X,Q extends effectAPI>( BaseClass: ExtendedlitElement, EffectorStore:Store<X>, API:Q = undefined ) {
     return class extends BaseClass {
@@ -33,12 +33,12 @@ export function EffectorMxn<X,Q extends effectAPI>( BaseClass: ExtendedlitElemen
         }
     
         useStore(){
-            this._watcherPointer =  this.store.watch(this._on_store_update.bind(this)) ;
+            this._watcherPointer =  this.store?.watch(this._on_store_update.bind(this)) ;
         }
     
         disconnectedCallback(){
             if(super.disconnectedCallback) super.disconnectedCallback();
-            this._watcherPointer.unsubscribe();
+            this._watcherPointer?.unsubscribe();
         }
     
         _on_store_update(currentState:X){

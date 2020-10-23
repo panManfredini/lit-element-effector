@@ -1,25 +1,46 @@
 # lit-element-effector
-Mixin to add an Effector Store to lit-element.
+Mixin to attach an Effector Store to lit-element.
 
-- Automatically request element update on effector store change
-- Support typescipt 
-- It's just a tiny wrapper, about [1kB minified](https://bundlephobia.com/result?p=lit-element-effector@0.1.0)
-- Support a pattern for inheritance
-- Safe: makes a copy of the store into the lit-elemet property `$`.
+- Automatically request element update on effector store change.
+- Support typescript.
+- It's just a tiny wrapper, about [1kB minified](https://bundlephobia.com/result?p=lit-element-effector@0.1.0).
+- Support a pattern for inheritance.
+- Safe: makes a copy of the store into the custom element.
 
 # Usage 
 
+```ts
+
+EffectorMxn( BaseClass, Store, EffectAPI = undefined ) => class extends BaseClass
+
+```
+The mixin takes as input parameters a `BaseClass` which must inherit from a `LitElement`, an Effector `Store` and an optional object, `EffectAPI`,
+that function as shortcut interface between the state change API and the custom element. The `EffectAPI` keys are strings and its values are expected to be 
+either effector `effects` or `events`.
+
+
 ```js
-const store = createStore( {greetings:"hello"});
-const changeGreeting = createEvent();
-store.on(changeGreeting, (_,p) => p );
+import {EffectorMxn} from "lit-element-effector"
+import {html, LitElement} from "lit-element"
+import {createStore} from "effector"
 
+const store = createStore( {greetings:"hello"} );
 
-class testClass extends EffectorMxn( LitElement, store ){
-    
+class testClass01 extends EffectorMxn( LitElement, store ){
     render(){
-        // the store state is copied into the `$` property
+        // the store state is available with the `$` property
         return html`<h1> ${this.$.greetings} world! </h1>`
     }
 }
 ```
+The provided store is reflected to the LitElement property ` $ `. Supports any store types, from strings to objects. 
+The store state is deep-copied to ` $ `. Direct assignment to the property ` $ ` should be avoided, altough they wont effect the state.
+
+
+## Event and Effect API Helper
+
+## React on Store change with user defined function
+
+## Inheritance
+
+## Testing Helpers
