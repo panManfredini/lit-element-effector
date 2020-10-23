@@ -1,6 +1,6 @@
 {
   "name": "lit-element-effector",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Mixin to attach an Effector Store to lit-element",
   "main": "index.js",
   "types": "src/index.ts",
