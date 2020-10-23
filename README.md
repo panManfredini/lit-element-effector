@@ -3,6 +3,7 @@ Mixin to add an Effector Store to lit-element.
 
 - Automatically request element update on effector store change
 - Support typescipt 
+- It's just a tiny wrapper, about [1kB minified](https://bundlephobia.com/result?p=lit-element-effector@0.1.0)
 - Support a pattern for inheritance
 - Safe: makes a copy of the store into the lit-elemet property `$`.
 
