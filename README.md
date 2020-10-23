@@ -1,11 +1,12 @@
 # lit-element-effector
-Mixin to attach an Effector Store to lit-element.
+Minimal mixin to attach an [Effector](https://effector.now.sh/) Store to [lit-element](https://lit-element.polymer-project.org/).
 
 - Automatically request element update on effector store change.
 - Supports typescript.
-- It's just a tiny wrapper, about [1kB minified](https://bundlephobia.com/result?p=lit-element-effector@latest).
+- Just a tiny wrapper, about [1kB minified](https://bundlephobia.com/result?p=lit-element-effector@latest).
 - Supports a pattern for inheritance.
 - Safe: makes a copy of the store into the custom element.
+- Built with custom-element testing in mind.
 
 # Usage 
 
@@ -43,7 +44,7 @@ The store state is deeply-copied to **$**. Direct assignment to the property **$
 
 ```js
 const evnt = createEvent<string>();
-store.on( evnt, (_,p)=> {greetings:p} );
+store.on( evnt, (_,p)=> { return {greetings:p} } );
 const API = { changeGreetings : evnt } ;
 
 class example02 extends EffectorMxn(LitElement, store, API){
@@ -62,9 +63,10 @@ class example02 extends EffectorMxn(LitElement, store, API){
 
 ```
 
-This is no more than a reccomendation. The effect API is injected into the `dispatch` getter property, this
-helps a bit with decoupling (see an example in the test section below). In some cases can be more convenient to override the `dispatch` getter,
-if you do so is a good practice to return a shallow copy of the API object (which could be used in multiple places).
+If defined, the effect API is injected into the `dispatch` getter property. This is no more than a recommendation, 
+it helps to keep the custom-element decoupled from the app-state (see an example in the test section below). 
+In some cases can be more convenient to override the `dispatch` getter, if you do so is a good practice to return 
+a shallow copy of the API object (since it could be used in multiple places).
 
 ### React on Store change with user defined function
 
@@ -80,9 +82,9 @@ class example03 extends EffectorMxn(LitElement, store){
 }
 ```
 
-In case the user define the function `on_store_update`, this will be executed any time a store change is triggered.
-The only argument is passed to the funation is a copy of the current store. This function will run after the property **$** is 
-set, but before any element update/render.
+If defined, the function `on_store_update` will be executed any time a store change is triggered.
+The only argument passed to the funation is a copy of the current store. This function will run after the property **$** is 
+set, but before any of the element's update/render.
 
 ### Inheritance
 

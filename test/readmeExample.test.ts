@@ -17,7 +17,7 @@ customElements.define("example-01",example01);
 
 
 const evnt = createEvent<string>();
-store.on( evnt, (_,p)=> {greetings:p} );
+store.on( evnt, (_,p)=> { return {greetings:p} } );
 const API = { changeGreetings : evnt } ;
 
 class example02 extends EffectorMxn(LitElement, store, API){
