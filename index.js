@@ -23,14 +23,16 @@ export function EffectorMxn(BaseClass, EffectorStore, API = undefined) {
             this.useStore();
         }
         useStore() {
-            this._watcherPointer = this.store.watch(this._on_store_update.bind(this));
+            var _a;
+            this._watcherPointer = (_a = this.store) === null || _a === void 0 ? void 0 : _a.watch(this.store_update_handler.bind(this));
         }
         disconnectedCallback() {
+            var _a;
             if (super.disconnectedCallback)
                 super.disconnectedCallback();
-            this._watcherPointer.unsubscribe();
+            (_a = this._watcherPointer) === null || _a === void 0 ? void 0 : _a.unsubscribe();
         }
-        _on_store_update(currentState) {
+        store_update_handler(currentState) {
             var stateCopy = this._deepCopyObject(currentState);
             this._reflectStoreToProperty(stateCopy);
             this._userReactionToStoreUpdate(stateCopy);

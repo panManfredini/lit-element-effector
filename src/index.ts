@@ -5,7 +5,7 @@ export type ExtendedlitElement = {
     new(): LitElement
 }
 
-export interface effectAPI  { [key:string]:(Effect<any,any,any>| Event<any> | ((i:any)=>void) )}
+export interface effectAPI  { [key:string]:(Effect<any,any,any>| Event<any> | ((i:any)=>void) | ((i:any)=>Promise<any>)) }
 
 export function EffectorMxn<X,Q extends effectAPI>( BaseClass: ExtendedlitElement, EffectorStore:Store<X>, API:Q = undefined ) {
     return class extends BaseClass {
@@ -33,7 +33,7 @@ export function EffectorMxn<X,Q extends effectAPI>( BaseClass: ExtendedlitElemen
         }
     
         useStore(){
-            this._watcherPointer =  this.store?.watch(this._on_store_update.bind(this)) ;
+            this._watcherPointer =  this.store?.watch(this.store_update_handler.bind(this)) ;
         }
     
         disconnectedCallback(){
@@ -41,7 +41,7 @@ export function EffectorMxn<X,Q extends effectAPI>( BaseClass: ExtendedlitElemen
             this._watcherPointer?.unsubscribe();
         }
     
-        _on_store_update(currentState:X){
+        store_update_handler(currentState:X){
             var stateCopy = this._deepCopyObject(currentState);
             this._reflectStoreToProperty(stateCopy);
             this._userReactionToStoreUpdate(stateCopy);
@@ -82,6 +82,7 @@ export function EffectorMxn<X,Q extends effectAPI>( BaseClass: ExtendedlitElemen
 
     }
 }
+
 
 
 

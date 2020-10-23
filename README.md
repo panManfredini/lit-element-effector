@@ -3,7 +3,7 @@ Mixin to attach an Effector Store to lit-element.
 
 - Automatically request element update on effector store change.
 - Support typescript.
-- It's just a tiny wrapper, about [1kB minified](https://bundlephobia.com/result?p=lit-element-effector@0.1.0).
+- It's just a tiny wrapper, about [1kB minified](https://bundlephobia.com/result?p=lit-element-effector@latest).
 - Support a pattern for inheritance.
 - Safe: makes a copy of the store into the custom element.
 
@@ -35,8 +35,8 @@ class example01 extends EffectorMxn( LitElement, store ){
 
 customElements.define("example-01",example01);
 ```
-The provided store is reflected to the LitElement property ** $ **. Supports any store types, from boolean to objects. 
-The store state is deep-copied to ** $ **. Direct assignment to the property ** $ ** should be avoided, altough they wont effect the state.
+The provided store is reflected to the LitElement property **$**. Supports any store types, from boolean to objects. 
+The store state is deep-copied to **$**. Direct assignment to the property **$** should be avoided, altough they wont effect the state.
 
 
 ### Event and Effect API Helper
