@@ -35,8 +35,8 @@ class example01 extends EffectorMxn( LitElement, store ){
 
 customElements.define("example-01",example01);
 ```
-The provided store is reflected to the LitElement property [ $ ](). Supports any store types, from boolean to objects. 
-The store state is deep-copied to [ $ ](). Direct assignment to the property [ $ ]() should be avoided, altough they wont effect the state.
+The provided store is reflected to the LitElement property ** $ **. Supports any store types, from boolean to objects. 
+The store state is deep-copied to ** $ **. Direct assignment to the property ** $ ** should be avoided, altough they wont effect the state.
 
 
 ### Event and Effect API Helper
