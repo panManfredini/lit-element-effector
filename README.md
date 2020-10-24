@@ -40,7 +40,7 @@ The provided store is reflected to the LitElement property **$**. Supports any s
 The store state is deeply-copied to **$**. Direct assignment to the property **$** should be avoided, altough it cannot affect the state.
 
 
-### Event and Effect API Helper
+## Event and Effect API Helper
 
 ```js
 import {createEvent, createEffect} from "effector"
@@ -72,7 +72,7 @@ it helps to keep the custom-element decoupled from the app-state (see an example
 In some cases can be more convenient to override the `dispatch` getter, if you do so is a good practice to return 
 a shallow copy of the API object (since it could be used in multiple places).
 
-### React on Store change with user defined function
+## React on Store change with user defined function
 
 ```js
 
@@ -90,7 +90,7 @@ If defined, the function `on_store_update` will be executed any time a store cha
 The only argument passed to the function is a copy of the current store. This function will run after the property **$** is 
 set, but before any of the element's update/render.
 
-### Inheritance
+## Inheritance
 
 ```js
 
@@ -117,7 +117,7 @@ LitElement makes sure that reflected properties of inherited classes are present
 applying the mixin multiple times the store is actually swapped, so the provided store of a child class must be a combination 
 of the parent store and the additional wanted properties.
 
-### Testing Helpers
+## Testing Helpers
 
 ```ts
       it("Detaches from current store", async ()=>{
@@ -125,7 +125,8 @@ of the parent store and the additional wanted properties.
         var ex01 = <example01>document.createElement("example-01");
 
         // this detaches from store (replace with undefined)
-        ex01.replaceStore();
+        ex01.replaceStore(); 
+     // ex01.replaceStore(newStore); 
 
         // the element is not initialized until it is connected
         // so usually one need to attach it to the DOM for testing
