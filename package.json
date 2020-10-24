@@ -1,10 +1,17 @@
 {
   "name": "lit-element-effector",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Mixin to attach an Effector Store to lit-element",
   "main": "index.js",
   "types": "src/index.ts",
-  "repository": "git@github.com:panManfredini/lit-element-effector.git",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/panManfredini/lit-element-effector.git"
+  },
+  "homepage": "https://github.com/panManfredini/lit-element-effector",
+  "bugs": {
+    "url": "https://github.com/panManfredini/lit-element-effector/issues"
+  },
   "author": "pan <pan.manfredini@gmail.com>",
   "license": "MIT",
   "scripts": {
