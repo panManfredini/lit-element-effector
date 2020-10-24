@@ -23,7 +23,7 @@ either effector `effects` or `events` (or functions).
 ```js
 import {EffectorMxn} from "lit-element-effector"
 import {html, LitElement} from "lit-element"
-import {createEvent, createStore} from "effector"
+import {createStore} from "effector"
 
 const store = createStore( {greetings:"hello"} );
 
@@ -43,11 +43,15 @@ The store state is deeply-copied to **$**. Direct assignment to the property **$
 ### Event and Effect API Helper
 
 ```js
-const evnt = createEvent<string>();
-store.on( evnt, (_,p)=> { return {greetings:p} } );
-const API = { changeGreetings : evnt } ;
+import {createEvent, createEffect} from "effector"
 
-class example02 extends EffectorMxn(LitElement, store, API){
+const evnt = createEvent<string>();
+const Fx = createEffect(/* some network call*/);
+
+store01.on( evnt, (_,p)=> { return {greetings:p} } );
+const API = { changeGreetings : evnt, networkCallFx : Fx } ;
+
+class example02 extends EffectorMxn(LitElement, store01, API){
     render(){
         return html`
             <h1> ${this.$.greetings} world! </h1>
@@ -115,12 +119,48 @@ of the parent store and the additional wanted properties.
 
 ### Testing Helpers
 
-There are a few convenient helpers to aid testing a custom-element with attached store. A function `replaceStore` is provided to swap the store with a fake one.
-The `store_update_handler` function can be used to simulate a store update.
-The `dispatch` getter returns a shallow copy of the effect-API, this means that you can swap the keys of that instance with fakes without 
-affecting the overall element class nor the original effect-API.
+```ts
+      it("Detaches from current store", async ()=>{
 
-```js
+        var ex01 = <example01>document.createElement("example-01");
+
+        // this detaches from store (replace with undefined)
+        ex01.replaceStore();
+
+        // the element is not initialized until it is connected
+        // so usually one need to attach it to the DOM for testing
+        // (in this specific case is not needed tough)
+        document.body.appendChild(ex01);
+        await ex01.updateComplete;  // needed if you want to check renders
+
+        expect(ex01.$).to.be.undefined
+
+        // you can use this to simulate a store update 
+        // best to run this before appendChild
+        ex01.store_update_handler( {greetings: "Ciao" } );
+
+        expect(ex01.$).to.deep.equal( {greetings: "Ciao" } );
+    });
+
 
 ```
+There are a few convenient helpers to aid testing a custom-element with attached store. A function `replaceStore` is provided to swap the store with a fake one.
+The `store_update_handler` function can be used to simulate a store update.
 
+```js
+  it("Reassign the event API",()=>{
+        customElements.define("example-02",example02);
+        var ex02 = document.createElement("example-02");
+        
+        ex02.dispatch.networkCallFx = ( ) => {};
+
+        document.body.appendChild(ex02);
+
+        /* go on with network related call disabled */
+
+    });
+
+```
+Many times during testing we would mock or stub effects that make network calls, here you can simply reassign the instance API. 
+The `dispatch` getter returns a shallow copy of the effect-API, this means that you can swap the keys of that instance with fakes without 
+affecting the overall element class nor the original effect-API.

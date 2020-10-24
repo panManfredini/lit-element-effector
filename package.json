@@ -20,6 +20,7 @@
     "effector"
   ],
   "devDependencies": {
+    "@open-wc/semantic-dom-diff": "^0.19.0",
     "@open-wc/testing": "^2.5.29",
     "@web/test-runner": "^0.9.5",
     "effector": "^21.5.0",

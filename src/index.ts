@@ -52,7 +52,8 @@ export function EffectorMxn<X,Q extends effectAPI>( BaseClass: ExtendedlitElemen
         }
         
         /**
-         * Replace the store with another one and subscribes to it. Usefull during testing, in case one wants to swapp with a fake store.
+         * Replace the store with another one and subscribes to it. If `store` is not provided it will unsubscribe 
+         * from the current store. Usefull during testing, in case one wants to swapp with a fake store or simply detach from it.
          * @param store new Store
          */
         replaceStore( store:Store<any> = undefined ){
@@ -71,6 +72,7 @@ export function EffectorMxn<X,Q extends effectAPI>( BaseClass: ExtendedlitElemen
          */
         useStore(){
             this._watcherPointer =  this.store?.watch(this.store_update_handler.bind(this)) ;
+            if(typeof this.store === "undefined") this.store_update_handler(undefined);
         }
     
         disconnectedCallback(){

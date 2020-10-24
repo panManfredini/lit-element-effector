@@ -31,7 +31,8 @@ export function EffectorMxn(BaseClass, EffectorStore, effectAPI = undefined) {
             return this._apiCopy;
         }
         /**
-         * Replace the store with another one and subscribes to it. Usefull during testing, in case one wants to swapp with a fake store.
+         * Replace the store with another one and subscribes to it. If `store` is not provided it will unsubscribe
+         * from the current store. Usefull during testing, in case one wants to swapp with a fake store or simply detach from it.
          * @param store new Store
          */
         replaceStore(store = undefined) {
@@ -51,6 +52,8 @@ export function EffectorMxn(BaseClass, EffectorStore, effectAPI = undefined) {
         useStore() {
             var _a;
             this._watcherPointer = (_a = this.store) === null || _a === void 0 ? void 0 : _a.watch(this.store_update_handler.bind(this));
+            if (typeof this.store === "undefined")
+                this.store_update_handler(undefined);
         }
         disconnectedCallback() {
             var _a;

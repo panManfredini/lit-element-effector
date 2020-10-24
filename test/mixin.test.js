@@ -7,6 +7,7 @@ describe("Specs for routedView", () => {
     const event = createEvent();
     const default_data = { name: "ciao", age: 7, obj: { a: 1, b: 2 } };
     const _store = restore(event, default_data);
+    var usrStoreUpdate = {};
     class t_class extends EffectorMxn(LitElement, _store, { test: event }) {
         static get properties() {
             return { testProp: { attribute: false, reflect: false } };
@@ -15,6 +16,8 @@ describe("Specs for routedView", () => {
             super();
             this.testProp = "zero";
         }
+        on_store_update(stateCopy) { usrStoreUpdate = stateCopy; }
+        ;
         render() {
             return html `${this.$.name} ${this.$.obj.a} ${this.$.obj.b}`;
         }
@@ -36,11 +39,16 @@ describe("Specs for routedView", () => {
         expect(el01.$).to.deep.equal(default_data);
         expect(el01.testProp).to.deep.equal("zero");
     });
-    it("On store data change, data is set", () => {
+    it("On startup the user defined function is called with datata that is a copy of state", () => {
+        expect(usrStoreUpdate).to.deep.equal(default_data);
+        expect(usrStoreUpdate).not.equal(default_data);
+    });
+    it("On store data change, data is set, also user defined function is called", () => {
         event({ name: "pip", age: 7, obj: { a: 3, b: 12 } });
         expect(el01.$.name).to.equal("pip");
         expect(el01.$.age).to.equal(7);
         expect(el01.$.obj).to.deep.equal({ a: 3, b: 12 });
+        expect(usrStoreUpdate).to.deep.equal({ name: "pip", age: 7, obj: { a: 3, b: 12 } });
     });
     it("Changing directly the property does not effect the store", () => {
         event({ name: "pipo", age: 12, obj: { a: 3, b: 18 } });
