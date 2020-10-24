@@ -58,7 +58,7 @@ describe("Specs for routedView", () => {
         expect(el01.$).to.deep.equal(default_data);
     });
     it("Inherits correctly props from a parent class", () => {
-        class testClass extends EffectorMxn(t_class, createStore({ c: 89, name: "ciao", obj: { a: 1, b: 2 } })) {
+        class testClass extends EffectorMxn(t_class, createStore({ c:89, name: "ciao", obj: { a: 1, b: 2 } })) {
         }
         customElements.define("t-gv-02", testClass);
         var el02 = document.createElement("t-gv-02");

@@ -7,10 +7,12 @@
         "outDir": "./",
         "allowJs": true,
         "sourceMap": false,
-        "experimentalDecorators": true
+        "experimentalDecorators": true,
+        "allowSyntheticDefaultImports":true
     },
     "include": [
-        "./src/index.ts",
+        "src/index.ts",
+        "src/test/*",
         "node_modules/*"
     ],
     "exclude": []

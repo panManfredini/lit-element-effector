@@ -6,18 +6,18 @@ Minimal mixin to attach an [Effector](https://effector.now.sh/) Store to [lit-el
 - Just a tiny wrapper, about [1kB minified](https://bundlephobia.com/result?p=lit-element-effector@latest).
 - Supports a pattern for inheritance.
 - Safe: makes a copy of the store into the custom element.
-- Built with custom-element testing in mind.
+- Built with testing in mind.
 
 # Usage 
 
 ```ts
 
-EffectorMxn( BaseClass, Store, EffectAPI = undefined ) => class extends BaseClass
+EffectorMxn( BaseClass, Store, FX_API = undefined ) => class extends BaseClass
 
 ```
-The mixin takes as input parameters a `BaseClass` which must inherit from a `LitElement`, an Effector `Store` and an optional object, `EffectAPI`.
+The mixin takes as input parameters a `BaseClass` which must inherit from a `LitElement`, an Effector `Store` and an optional object, `FX_API`.
 This last one is meant as dependency injection of the custom-element's effect interface, its values are expected to be 
-either effector `effects` or `events` (or in general functions).
+either effector `effects` or `events` (or functions).
 
 
 ```js
@@ -83,10 +83,44 @@ class example03 extends EffectorMxn(LitElement, store){
 ```
 
 If defined, the function `on_store_update` will be executed any time a store change is triggered.
-The only argument passed to the funation is a copy of the current store. This function will run after the property **$** is 
+The only argument passed to the function is a copy of the current store. This function will run after the property **$** is 
 set, but before any of the element's update/render.
 
 ### Inheritance
 
+```js
+
+import {combine} from "effector";
+const store02 = createStore( {username:"Alex"} )
+const combinedStore = combine(store01,store02, (a,b) => Object.assign({}, a,b) );
+
+// here applying the mixing to the previous example class
+class example04 extends EffectorMxn(example01, combinedStore){ 
+    
+    // adding a reflected attribute on top of the inherited ones
+    @property() type = "dark"
+    
+    render(){
+        return html `
+            ${super.render()}
+            <p class="${this.type}"> This is ${this.$.username}. </p>
+        `
+    }
+}
+
+```
+LitElement makes sure that reflected properties of inherited classes are present and functioning. One thing to notice is that when 
+applying the mixin multiple times the store is actually swapped, so the provided store of a child class must be a combination 
+of the parent store and the additional wanted properties.
+
 ### Testing Helpers
+
+There are a few convenient helpers to aid testing a custom-element with attached store. A function `replaceStore` is provided to swap the store with a fake one.
+The `store_update_handler` function can be used to simulate a store update.
+The `dispatch` getter returns a shallow copy of the effect-API, this means that you can swap the keys of that instance with fakes without 
+affecting the overall element class nor the original effect-API.
+
+```js
+
+```
 
