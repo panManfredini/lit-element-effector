@@ -6,16 +6,16 @@ Minimal mixin to attach an [Effector](https://effector.now.sh/) Store to [lit-el
 - Just a tiny wrapper, about [1kB minified](https://bundlephobia.com/result?p=lit-element-effector@latest).
 - Supports a pattern for inheritance.
 - Safe: makes a copy of the store into the custom element.
-- Built with testing in mind.
+- Built with best practices in mind.
 
 # Usage 
 
 ```ts
 
-EffectorMxn( BaseClass, Store, FX_API = undefined ) => class extends BaseClass
+EffectorMxn( BaseClass, Store, FxAPI? ) => class extends BaseClass
 
 ```
-The mixin takes as input parameters a `BaseClass` which must inherit from a `LitElement`, an Effector `Store` and an optional object, `FX_API`.
+The mixin takes as input parameters a `BaseClass` which must inherit from a `LitElement`, an Effector `Store` and an optional object, `FxAPI`.
 This last one is meant as dependency injection of the custom-element's effect interface, its values are expected to be 
 either effector `effects` or `events` (or functions).
 
@@ -45,11 +45,12 @@ The store state is deeply-copied to **$**. Direct assignment to the property **$
 ```js
 import {createEvent, createEffect} from "effector"
 
-const evnt = createEvent<string>();
+const evnt = createEvent();
 const Fx = createEffect(/* some network call*/);
 
-store01.on( evnt, (_,p)=> { return {greetings:p} } );
-const API = { changeGreetings : evnt, networkCallFx : Fx } ;
+store01.on( evnt, (_,p) => { return {greetings:p} } );
+
+const API = { changeGreetings: evnt,  networkCallFx: Fx } ;
 
 class example02 extends EffectorMxn(LitElement, store01, API){
     render(){
@@ -71,6 +72,7 @@ If defined, the effect API is injected into the `dispatch` getter property. This
 it helps to keep the custom-element decoupled from the app-state (see an example in the test section below). 
 In some cases can be more convenient to override the `dispatch` getter, if you do so is a good practice to return 
 a shallow copy of the API object (since it could be used in multiple places).
+
 
 ## React on Store change with user defined function
 
@@ -102,7 +104,7 @@ const combinedStore = combine(store01,store02, (a,b) => Object.assign({}, a,b) )
 class example04 extends EffectorMxn(example01, combinedStore){ 
     
     // adding a reflected attribute on top of the inherited ones
-    @property() type = "dark"
+    @property() type = "dark";
     
     render(){
         return html `
@@ -120,24 +122,21 @@ of the parent store and the additional wanted properties.
 ## Testing Helpers
 
 ```ts
-      it("Detaches from current store", async ()=>{
+      it("Detaches from current store, send fake data", async ()=>{
 
         var ex01 = <example01>document.createElement("example-01");
 
         // this detaches from store (replace with undefined)
         ex01.replaceStore(); 
-     // ex01.replaceStore(newStore); 
+        //ex01.replaceStore(newStore); 
 
         // the element is not initialized until it is connected
-        // so usually one need to attach it to the DOM for testing
-        // (in this specific case is not needed tough)
         document.body.appendChild(ex01);
-        await ex01.updateComplete;  // needed if you want to check renders
+        await ex01.updateComplete;  // wait for render
 
-        expect(ex01.$).to.be.undefined
+        expect(ex01.$).to.be.undefined; // no store
 
-        // you can use this to simulate a store update 
-        // best to run this before appendChild
+        // simulate a store update with fake data 
         ex01.store_update_handler( {greetings: "Ciao" } );
 
         expect(ex01.$).to.deep.equal( {greetings: "Ciao" } );
@@ -146,10 +145,10 @@ of the parent store and the additional wanted properties.
 
 ```
 There are a few convenient helpers to aid testing a custom-element with attached store. A function `replaceStore` is provided to swap the store with a fake one.
-The `store_update_handler` function can be used to simulate a store update.
+The `store_update_handler` function can be used to simulate a store update with fake data, you can also use this to initialize the element before appending the element to DOM.
 
 ```js
-  it("Reassign the event API",()=>{
+  it("Reassign the event API of an instance",()=>{
         customElements.define("example-02",example02);
         var ex02 = document.createElement("example-02");
         
@@ -162,6 +161,6 @@ The `store_update_handler` function can be used to simulate a store update.
     });
 
 ```
-Many times during testing we would mock or stub effects that make network calls, here you can simply reassign the instance API. 
+Many times during testing we would mock or stub effects that make network calls, here you can simply reassign the instance API injecting a different function. 
 The `dispatch` getter returns a shallow copy of the effect-API, this means that you can swap the keys of that instance with fakes without 
 affecting the overall element class nor the original effect-API.
