@@ -4,6 +4,8 @@
   "description": "Mixin to attach an Effector Store to lit-element",
   "main": "index.js",
   "types": "src/index.ts",
+  "sideEffects": false,
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/panManfredini/lit-element-effector.git"
@@ -15,6 +17,7 @@
   "author": "pan <pan.manfredini@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "build": "tsc",
     "test": "tsc && web-test-runner",
     "test:watch": "web-test-runner --watch"
   },

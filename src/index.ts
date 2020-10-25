@@ -28,7 +28,7 @@ export function EffectorMxn<X,Q extends effectAPI>( BaseClass: ExtendedlitElemen
             super();
             this.$ = undefined;
             this._watcherPointer = undefined;
-            // @ts-expect-error
+            // @ts-ignore
             this._apiCopy = Object.assign({}, effectAPI, super.dispatch);
             this._storePointer = EffectorStore; 
         }
@@ -96,10 +96,10 @@ export function EffectorMxn<X,Q extends effectAPI>( BaseClass: ExtendedlitElemen
          * @param current_data 
          */
         _userReactionToStoreUpdate(current_data:any){
-            //@ts-expect-error
+            //@ts-ignore
             if (this.on_store_update) 
             {
-                //@ts-expect-error
+                //@ts-ignore
                 this.on_store_update(current_data);
                 this.requestUpdate();
             }

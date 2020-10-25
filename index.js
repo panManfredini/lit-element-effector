@@ -11,7 +11,7 @@ export function EffectorMxn(BaseClass, EffectorStore, effectAPI = undefined) {
             super();
             this.$ = undefined;
             this._watcherPointer = undefined;
-            // @ts-expect-error
+            // @ts-ignore
             this._apiCopy = Object.assign({}, effectAPI, super.dispatch);
             this._storePointer = EffectorStore;
         }
@@ -76,9 +76,9 @@ export function EffectorMxn(BaseClass, EffectorStore, effectAPI = undefined) {
          * @param current_data
          */
         _userReactionToStoreUpdate(current_data) {
-            //@ts-expect-error
+            //@ts-ignore
             if (this.on_store_update) {
-                //@ts-expect-error
+                //@ts-ignore
                 this.on_store_update(current_data);
                 this.requestUpdate();
             }
