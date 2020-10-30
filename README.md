@@ -8,6 +8,10 @@ Minimal mixin to attach an [Effector](https://effector.now.sh/) Store to [lit-el
 - Safe: makes a copy of the store into the custom element.
 - Built with best practices in mind.
 
+
+**/!\ currently there is an [issue](https://github.com/panManfredini/lit-element-effector/issues/2) with ts-loader, but rollup and standalone webpack work.**
+
+
 # Usage 
 
 ```ts
@@ -25,7 +29,7 @@ import {EffectorMxn} from "lit-element-effector"
 import {html, LitElement} from "lit-element"
 import {createStore} from "effector"
 
-const store = createStore( {greetings:"hello"} );
+const store01 = createStore( {greetings:"hello"} );
 
 class example01 extends EffectorMxn( LitElement, store ){
     render(){
